@@ -1,8 +1,7 @@
 package monkey.test.system
 
 import akka.actor.{ActorRef, ActorSystem}
-import monkey.actor.MonkeyMonitor
-import monkey.test.actor.TestMonkeyParent
+import monkey.actor.{MonkeyMonitor, MonkeyParent}
 
 /**
   * Created by asantuy on 16/03/2017.
@@ -14,7 +13,7 @@ object TestMonkeySystem {
 
     def set(system: ActorSystem): Unit = {
         monitor = system.actorOf(MonkeyMonitor.props)
-        parent = system.actorOf(TestMonkeyParent.props(monitor))
+        parent = system.actorOf(MonkeyParent.props(monitor))
     }
 
     def reset(system: ActorSystem): Unit = {

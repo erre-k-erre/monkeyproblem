@@ -12,37 +12,42 @@ import scala.concurrent.duration.Duration
 /**
   * Created by asantuy on 16/03/2017.
   */
-abstract class MonkeyParent(val monitor: ActorRef) extends Actor {
+class MonkeyParent(val monitor: ActorRef) extends Actor {
 
     import context._
 
-    def generator: (Int, Direction)
-
-    schedule()
+    //def generator: (Int, Direction)
 
     def receive = {
         case CreateMonkey(dir) =>
-            context.actorOf(Monkey.props(dir, monitor))
-            schedule()
+            actorOf(Monkey.props(dir, monitor))
     }
 
-    protected def schedule() = {
-        val (delay, dir) = generator
-        if (delay >= 0) {
-            system.scheduler.scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS), self, CreateMonkey(dir))
-        }
-    }
 }
 
+object MonkeyParent {
+    def props(monitor: ActorRef) =
+        Props(classOf[MonkeyParent], monitor)
+}
 
 class RandomMonkeyParent(override val monitor: ActorRef) extends MonkeyParent(monitor) {
 
     import monkey.Configuration._
+    import context._
 
-    def generator = {
-        val dir = Random.nextBoolean()
+    schedule()
+
+    def schedule(): Unit = {
         val delay = Random.nextInt((monkeyMaxDelay.toMillis - monkeyMinDelay.toMillis).toInt)
-        (delay, if (dir) WestToEast else EastToWest)
+        val dir = if (Random.nextBoolean()) WestToEast else EastToWest
+
+        if (delay >= 0) {
+            system.scheduler.scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS)) {
+                self ! CreateMonkey(dir)
+                schedule()
+            }
+        }
+
     }
 }
 
