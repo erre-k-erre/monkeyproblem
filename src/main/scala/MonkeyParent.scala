@@ -36,13 +36,13 @@ abstract class MonkeyParent(val monitor: ActorRef) extends Actor {
 
 
 class RandomMonkeyParent(override val monitor: ActorRef) extends MonkeyParent(monitor) {
-    var i = 0
+
+    import monkey.Configuration._
 
     def generator = {
-        //val dir = Random.nextBoolean()
-        //(Random.nextInt(7001) + 1000, if (dir) WestToEast else EastToWest)
-        i = i + 1
-        (3000, if (i % 2 == 0) WestToEast else EastToWest)
+        val dir = Random.nextBoolean()
+        val delay = Random.nextInt((monkeyMaxDelay.toMillis - monkeyMinDelay.toMillis).toInt)
+        (delay, if (dir) WestToEast else EastToWest)
     }
 }
 
