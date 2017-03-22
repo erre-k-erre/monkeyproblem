@@ -28,13 +28,13 @@ object MonkeySystem {
     }
 
     /**
-      * Return a new Actor System named <i>Monkey System</i> with the actors [[MonkeyMonitor]]
+      * Return a new Actor System named <i>MonkeySystem</i> with the actors [[MonkeyMonitor]]
       * and a [[RandomMonkeyParent]].
       * It immediately starts to produce monkeys.
       * @return An [[ActorSystem]].
       */
     def apply(): ActorSystem = {
-        val system = ActorSystem("Monkey System")
+        val system = ActorSystem("MonkeySystem")
         apply(system)
         system
     }

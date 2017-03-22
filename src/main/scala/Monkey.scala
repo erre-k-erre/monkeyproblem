@@ -16,6 +16,7 @@ import scala.concurrent.duration.Duration._
   * @param monitor The [[akka.actor.ActorRef]] to the actor acting as monitor in the system.
   */
 class Monkey(val direction: Direction, val monitor: ActorRef) extends Actor with ActorLogging {
+    import context._
 
     val scheduler = context.system.scheduler
 

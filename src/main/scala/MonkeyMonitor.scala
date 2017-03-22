@@ -13,7 +13,7 @@ import scala.concurrent.duration.Duration
   * @param ft All messages processed by the monitor will be forwarded to this [[Actor]]. Useful for testing purposes.
   */
 class MonkeyMonitor(ft: ActorRef = Actor.noSender) extends Actor with ActorLogging {
-
+    import context._
     // The current direction of the Monkeys that are traversing the rope.
     var currentDirection: Direction = _
     // The queue for the monkeys coming from the West.
