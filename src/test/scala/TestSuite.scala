@@ -10,6 +10,11 @@ import org.scalatest.BeforeAndAfterAll
 
 import scala.concurrent.duration._
 
+/**
+  * This tests collection combines black-box and white-box styles of actor testing. Time intervals are set to the
+  * default system configuration (4 seconds to traverse the canyon and 1 second to grab the rope). In order to avoid
+  * non-deterministic behavior a simple [[monkey.actor.MonkeyParent]] class is used.
+  */
 class TestSuite() extends TestKit(ActorSystem()) with ImplicitSender
     with WordSpecLike with Matchers with BeforeAndAfterAll {
 

@@ -16,6 +16,7 @@ class TestMonkeySystem(val system: ActorSystem, val ft: ActorRef) {
     def reset(): Unit = {
         if (monitor != null) system stop monitor
         if (parent != null) system stop parent
+        // The inner state of the monitor actor will be exposed to tests.
         monitor = TestActorRef.create(system, MonkeyMonitor.props(ft))
         parent = system.actorOf(MonkeyParent.props(monitor))
     }
