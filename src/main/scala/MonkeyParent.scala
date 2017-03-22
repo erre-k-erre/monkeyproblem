@@ -48,14 +48,12 @@ class RandomMonkeyParent(override val monitor: ActorRef) extends MonkeyParent(mo
         // function is available in the Random API).
         val delay = nextInt((monkeyMaxDelay.toMillis - monkeyMinDelay.toMillis).toInt) + monkeyMinDelay.toMillis
         val dir = if (nextBoolean()) WestToEast else EastToWest
-
-        if (delay >= 0) {
-            system.scheduler.scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS)) {
-                // This message will be processed by the super-class (MonkeyParent) receive method.
-                self ! dir
-                // The process schedules itself infinitely.
-                schedule()
-            }
+        
+        system.scheduler.scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS)) {
+            // This message will be processed by the super-class (MonkeyParent) receive method.
+            self ! dir
+            // The process schedules itself infinitely.
+            schedule()
         }
 
     }
