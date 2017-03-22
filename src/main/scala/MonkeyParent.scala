@@ -17,7 +17,7 @@ import scala.concurrent.duration.Duration
   */
 class MonkeyParent(val monitor: ActorRef) extends Actor {
 
-    def receive = {
+    def receive: Receive = {
         case dir: Direction => context.actorOf(Monkey.props(dir, monitor))
     }
 
@@ -38,7 +38,7 @@ class RandomMonkeyParent(override val monitor: ActorRef) extends MonkeyParent(mo
     import monkey.Configuration._
     import context._
 
-    // Upon creation we schedule the first Monkey instantiation.
+    // Upon creation the first Monkey instantiation is scheduled.
     schedule()
 
     def schedule(): Unit = {
@@ -46,9 +46,9 @@ class RandomMonkeyParent(override val monitor: ActorRef) extends MonkeyParent(mo
         // Notice that the interval is expressed in millis an casted to Int. This may cause overflow problems
         // if the interval is too big, but is necessary in order to use the nextInt function (no similar nextLong(Long)
         // function is available in the Random API).
-        val delay = nextInt((monkeyMaxDelay.toMillis - monkeyMinDelay.toMillis).toInt) + monkeyMinDelay.toMillis
+        val delay = nextInt((monkeyMaxDelay.toMillis - monkeyMinDelay.toMillis).toInt) + monkeyMinDelay.toMillis.toInt
         val dir = if (nextBoolean()) WestToEast else EastToWest
-        
+
         system.scheduler.scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS)) {
             // This message will be processed by the super-class (MonkeyParent) receive method.
             self ! dir

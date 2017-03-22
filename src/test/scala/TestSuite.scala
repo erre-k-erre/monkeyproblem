@@ -81,7 +81,7 @@ class TestSuite() extends TestKit(ActorSystem()) with ImplicitSender
             expectMsg(1.1.seconds, OnTheRope)
             expectNoMsg(1.second)
             expectMsg(0.1.seconds, OnTheRope)
-            expectMsg(3.seconds, Done)
+            expectMsg(3.1.seconds, Done)
             expectNoMsg(1.second)
             expectMsg(0.1.seconds, Done)
             assert(TestMonkeySystem.monitor.underlyingActor.fromEast.isEmpty, "Monkey is still enqueued.")
