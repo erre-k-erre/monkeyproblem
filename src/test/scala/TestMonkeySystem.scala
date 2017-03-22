@@ -1,6 +1,7 @@
 package monkey.test.system
 
 import akka.actor.{ActorRef, ActorSystem}
+import akka.testkit.TestActorRef
 import monkey.actor.{MonkeyMonitor, MonkeyParent}
 
 /**
@@ -8,17 +9,14 @@ import monkey.actor.{MonkeyMonitor, MonkeyParent}
   */
 object TestMonkeySystem {
 
-    var monitor: ActorRef = _
+    var monitor: TestActorRef[MonkeyMonitor] = _
     var parent: ActorRef = _
 
-    def set(system: ActorSystem): Unit = {
-        monitor = system.actorOf(MonkeyMonitor.props)
+    def reset(system: ActorSystem, ft: ActorRef): Unit = {
+        if (monitor != null) system stop monitor
+        if (parent != null) system stop parent
+        monitor = TestActorRef.create(system, MonkeyMonitor.props(ft))
         parent = system.actorOf(MonkeyParent.props(monitor))
     }
 
-    def reset(system: ActorSystem): Unit = {
-        system stop monitor
-        system stop parent
-        set(system)
-    }
 }
